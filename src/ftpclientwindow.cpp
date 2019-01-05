@@ -27,16 +27,16 @@ FtpClientWindow::FtpClientWindow(QWidget *parent, Qt::WFlags flags)
 		connect(downLoadPB, SIGNAL(clicked()), this, SLOT(downloadFile()));
 
 
-		connect(ftpClient, SIGNAL(cmdChangeList(const QUrlInfo &)), 
+        connect(ftpClient, SIGNAL(sigChangeList(const QUrlInfo &)),
 			this, SLOT(changeList(const QUrlInfo &)));
 
-		connect(ftpClient, SIGNAL(cmdConncted(bool)), 
+        connect(ftpClient, SIGNAL(sigConncted(bool)),
 			this, SLOT(onConnect(bool)));
-		connect(ftpClient, SIGNAL(cmdGot(bool)), 
+        connect(ftpClient, SIGNAL(sigGot(bool)),
 			this, SLOT(onGot(bool)));
-		connect(ftpClient, SIGNAL(cmdList(bool)), 
+        connect(ftpClient, SIGNAL(sigList(bool)),
 			this, SLOT(onList(bool)));		
-		connect(ftpClient, SIGNAL(cmdIsTopDir(bool)), 
+        connect(ftpClient, SIGNAL(sigIsTopDir(bool)),
 			this, SLOT(onTopDir(bool)));
 
 		connect(quitPB, SIGNAL(clicked()), this, SLOT(close()));
@@ -123,11 +123,11 @@ void FtpClientWindow::onConnect(bool isconnect)
 	if(isconnect){
 		listWidget->clear();
 		listWidget->setEnabled(true);
-		connectPB->setText(tr("断开"));
+        connectPB->setText(tr("断开连接"));
 	}
 	else{
 		listWidget->setEnabled(false);
-		connectPB->setText(tr("连接"));
+        connectPB->setText(tr("连接"));
 	}
 	statusLab->setText(ftpClient->getStatus());
 }

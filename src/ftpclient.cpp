@@ -43,13 +43,13 @@ void FtpClient::ftpConnect()
          */
 		ftpStatus = tr("连接FTP服务器 %1...")
 			.arg(serverName);
-		emit cmdConncted(true);
+        emit sigConncted(true);
 	}
 	else {
         ftp->abort();           //终止当前命令并删除所有计划的命令。
         ftp->deleteLater();     //将此对象调度为删除。
 		ftp = NULL;
-		emit cmdConncted(false);
+        emit sigConncted(false);
 	}
 
 }
@@ -68,11 +68,11 @@ void FtpClient::ftpCommandFinished(int /*commandId*/, bool error)
 			ftpStatus =tr("无法连接FTP服务器： "
 				"%1. 请检查主机名、端口、用户名和密码是否正确 ")
 				.arg(serverName);
-			emit cmdConncted(false);
+            emit sigConncted(false);
 			return;
 		}
 		ftpStatus =tr("已连接FTP服务器：%1。 ").arg(serverName);
-		emit cmdConncted(true);
+        emit sigConncted(true);
 		return;
 	}
 
@@ -83,18 +83,18 @@ void FtpClient::ftpCommandFinished(int /*commandId*/, bool error)
 				.arg(file->fileName());
 			file->close();
 			file->remove();
-			emit cmdGot(true);
+            emit sigGot(true);
 		} else {
 			ftpStatus = tr("下载文件 %1 到当前目录")
 				.arg(file->fileName());
 			file->close();
-			emit cmdGot(false);
+            emit sigGot(false);
 		}
 		delete file;
 	} else if (ftp->currentCommand() == QFtp::List) {
 		QApplication::restoreOverrideCursor();
         if (DirectoryList.isEmpty()) {
-			emit cmdList(true);
+            emit sigList(true);
 		}
 	}
 }
@@ -104,7 +104,7 @@ void FtpClient::addToList(const QUrlInfo &urlInfo)
 
     //DirectoryList[urlInfo.name()] = urlInfo.isDir();
     DirectoryList.insert(urlInfo.name(),urlInfo.isDir());
-	emit cmdChangeList(urlInfo);
+    emit sigChangeList(urlInfo);
 }
 
 
@@ -117,7 +117,7 @@ void FtpClient::changeDir(const QString& dir)
 		currentPath = currentPath.left(currentPath.lastIndexOf('/'));
 		if (currentPath.isEmpty()) {
 			ftp->cd("/");
-			emit cmdIsTopDir(true);
+            emit sigIsTopDir(true);
 		} else {
 			ftp->cd(currentPath);
 		}
@@ -130,7 +130,7 @@ void FtpClient::changeDir(const QString& dir)
 			currentPath += "/" + dir;
 			ftp->cd(dir);
 			ftp->list();
-			emit cmdIsTopDir(false);
+            emit sigIsTopDir(false);
 			QApplication::setOverrideCursor(Qt::WaitCursor);
 		}
 	}
@@ -158,7 +158,7 @@ void FtpClient::getFile(const QString& fileName)
 
 	progressDialog->setLabelText(tr("下载文件%1...").arg(fileName));
 	progressDialog->show();
-	emit cmdDownloading();
+    emit sigDownloading();
 
 }
 

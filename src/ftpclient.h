@@ -29,12 +29,12 @@ public:
 	void changeDir(const QString&);
 	void getFile(const QString&);
 signals:
-	void cmdConncted(bool isconnect);
-	void cmdGot(bool error);
-	void cmdList(bool error);
-	void cmdIsTopDir(bool istop);
-	void cmdChangeList(const QUrlInfo &);
-	void cmdDownloading();
+    void sigConncted(bool isconnect);
+    void sigGot(bool error);
+    void sigList(bool error);
+    void sigIsTopDir(bool istop);
+    void sigChangeList(const QUrlInfo &);
+    void sigDownloading();
 public slots:
 	void ftpCommandFinished(int commandId, bool error);
 	void updateDataTransferProgress(qint64 readBytes,
